@@ -8,6 +8,7 @@
 ### Competitive Baselines
 - [x] [RN50](baseline_results/RN50-openai.json)
 - [x] [roberta-ViT-B-32](baseline_results/roberta-ViT-B-32-laion2b_s12b_b32k.json)
+- [x] [CLIP-ViT-B-32](baseline_results/CLIP-ViT-B32.json)
 
 ## Readings
 For readings related to this project, go [here](readings/README.md)
