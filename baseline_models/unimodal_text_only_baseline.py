@@ -5,6 +5,7 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 import os
 import json
+DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 
 class TrainDataset(Dataset):
@@ -32,7 +33,10 @@ class TestDataset(Dataset):
 
 
 def get_data(path):
-    data = pd.read_csv(path, sep="\t").sample(frac=0.1, replace=True, random_state=1)
+    data = pd.read_csv(path, sep="\t")
+    positive_samples = data[data["SCORE"] >= 0.5].sample(n=160000, random_state=42)
+    negative_samples = data[data["SCORE"] < 0.5].sample(n=160000, random_state=42)
+    data = pd.concat([positive_samples, negative_samples]).sample(frac = 1)
     sentences = data["GENERIC SENTENCE"].apply(lambda x: x.lower())
     scores = data["SCORE"]
     return sentences, scores
@@ -66,17 +70,17 @@ class Network(torch.nn.Module):
     def __init__(self):
         super(Network, self).__init__()
         self.model = torch.nn.Sequential(
-            torch.nn.Linear(24, 128, bias=True),
+            torch.nn.Linear(24, 2048, bias=True),
             torch.nn.ReLU(),
-            torch.nn.Linear(128, 128, bias=True),
+            torch.nn.Linear(2048, 2048, bias=True),
             torch.nn.ReLU(),
-            torch.nn.Linear(128, 128, bias=True),
+            torch.nn.Linear(2048, 2048, bias=True),
             torch.nn.ReLU(),
-            torch.nn.Linear(128, 128, bias=True),
+            torch.nn.Linear(2048, 2048, bias=True),
             torch.nn.ReLU(),
-            torch.nn.Linear(128, 128, bias=True),
+            torch.nn.Linear(2048, 2048, bias=True),
             torch.nn.ReLU(),
-            torch.nn.Linear(128, 1, bias=True),
+            torch.nn.Linear(2048, 1, bias=True),
             torch.nn.Sigmoid()
         )
     
@@ -88,6 +92,7 @@ def train(model, dataloader, criterion, optimizer):
     model.train()
     num_correct, total_loss = 0, 0
     for i, (sentence, label) in enumerate(dataloader):
+        sentence, label = sentence.to(DEVICE), label.to(DEVICE)
         optimizer.zero_grad()
         scores = model.forward(sentence)
         scores = torch.reshape(scores, (scores.size(dim=0),))
@@ -104,46 +109,45 @@ def train(model, dataloader, criterion, optimizer):
 
 def test(model, dataloader):
     model.eval()
+    num_correct = 0
     for i, (caption, labels) in enumerate(dataloader):
+        caption, labels = caption.to(DEVICE), labels.to(DEVICE)
         with torch.inference_mode():
             output = model(caption)
-            output = torch.reshape(output, (output.size(dim=0),))
-    return int(torch.sum(torch.where(output >= 0.5, torch.tensor(1), torch.tensor(0)) == labels))
+        output = torch.reshape(output, (output.size(dim=0),))
+        num_correct += int(torch.sum(torch.where(output >= 0.5, torch.tensor(1, dtype=torch.int), torch.tensor(0, dtype=torch.int)) == labels))
+        del caption, labels
+    total_acc = (100 * num_correct) / (32 * len(dataloader))
+    return total_acc
     
 
 
 if __name__=="__main__":
     train_dataloader = generate_train_dataloader()
-    model = Network()
+    model = Network().to(DEVICE)
     criterion = torch.nn.BCELoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
-    scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer, 0.5)
+    optimizer = torch.optim.SGD(model.parameters(), lr=0.00001, momentum=0.9, weight_decay=1e-4)
     for epoch in range(10):
         train_acc, train_loss = train(model, train_dataloader, criterion, optimizer)
-        print("\nEpoch {}/{}: \nTrain Acc: {:.04f}%\t Train Loss: {:.04f}".format(
-        epoch + 1, 10, train_acc, train_loss))
-        scheduler.step()
+        print("\nEpoch {}/{}: \nTrain Acc: {:.04f}%\t Train Loss: {:.04f}".format(epoch + 1, 10, train_acc, train_loss))
     caption_files = os.listdir("data/caption_jsons")
     results = {}
     for file in caption_files:
         path = os.path.join("data/caption_jsons", file)
         with open(path, "r") as f:
             data = json.load(f)
-        total = 0
         captions, labels = [], []
         for key in data.keys():
-            captions.append(data[key]["caption"])
-            captions.append(data[key]["negative_caption"])
-            total += 1
+            captions.append(data[key]["caption"].lower())
+            captions.append(data[key]["negative_caption"].lower())
             labels.append(1)
             labels.append(0)
         captions_tokens = generate_tokens(captions)
         labels = torch.tensor(labels, dtype=torch.int)
         test_dataloader = generate_test_dataloader(captions_tokens, labels)
-        num_correct = test(model, test_dataloader)
-        results[file.split(".")[0]] = num_correct / total
+        results[file.split(".")[0]] = test(model, test_dataloader)
         print(results[file.split(".")[0]])
     json_res = json.dumps(results)
-    with open("Unimodal_text_only_baseline.json", "w") as outfile:
+    with open("unimodal_text_only_baseline.json", "w") as outfile:
         outfile.write(json_res)
     
