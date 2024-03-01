@@ -4,3 +4,4 @@ Please refer to the following papers/posts related to this project:
 - [Linguistic Binding in Diffusion Models](https://arxiv.org/abs/2306.08877)
 - [When and why vision-language models behave like bags-of-words](https://arxiv.org/abs/2210.01936)
 - [Coarse-to-Fine Contrastive Learning in Image-Text-Graph Space for Improved Vision-Language Compositionality](https://arxiv.org/abs/2305.13812)
+- [Vera: General Purpose Plausibility Estimation Model](https://arxiv.org/abs/2305.03695)
