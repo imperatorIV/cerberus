@@ -5,6 +5,7 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 import os
 import json
+from torchsummary import summary
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
 
@@ -125,6 +126,7 @@ def test(model, dataloader):
 if __name__=="__main__":
     train_dataloader = generate_train_dataloader()
     model = Network().to(DEVICE)
+    print(summary(model, (1, 32, 24)))
     criterion = torch.nn.BCELoss()
     optimizer = torch.optim.SGD(model.parameters(), lr=0.00001, momentum=0.9, weight_decay=1e-4)
     for epoch in range(10):
