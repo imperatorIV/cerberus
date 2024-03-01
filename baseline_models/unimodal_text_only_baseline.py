@@ -5,7 +5,7 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 import os
 import json
-DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
 
 class TrainDataset(Dataset):
