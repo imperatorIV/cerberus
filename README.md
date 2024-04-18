@@ -1,6 +1,8 @@
 # cerberus
 ## Reports
 - [Report 1](reports/11_777_Report_1__Dataset_Proposal_and_Analysis__1.pdf)
+- [Report 2](reports/11_777_Report_2__Baselines_and_Model_Proposal.pdf)
+- [Report 3](reports/11_777_Report_3__Baselines_and_Analysis.pdf)
 
 ## Baselines Implemented
 ### Unimodal Baselines
