@@ -1,0 +1,68 @@
+1. Input: A very bright colored motorcycle parked on a sidewalk.
+Is it possible to swap attributes in the input sentence to generate a new sentence that is different from the input sentence and makes logical sense? Yes
+Swappable adjectives: very bright
+Output: A brightly colored motorcycle parked on a sidewalk.
+
+2. Input: A cup of soup on a plate next to some crackers.
+Is it possible to swap attributes in the input sentence to generate a new sentence that is different from the input sentence and makes logical sense? Yes
+Swappable adjectives: some
+Output: A cup of soup on a plate next to several crackers.
+
+3. Input: People outside on a sunny day filling plates on both sides of the table.
+Is it possible to swap attributes in the input sentence to generate a new sentence that is different from the input sentence and makes logical sense? Yes
+Swappable adjectives: both
+Output: People outside on a sunny day filling plates on each side of the table.
+
+4. Input: A bunch of horses on a street with one man in a hat.
+Is it possible to swap attributes in the input sentence to generate a new sentence that is different from the input sentence and makes logical sense? Yes
+Swappable adjectives: one
+Output: A bunch of horses on a street with a man in a hat.
+
+5. Input: A bench is surrounded by water as a man sits on it.
+Is it possible to swap attributes in the input sentence to generate a new sentence that is different from the input sentence and makes logical sense? No
+For the caption "A group of wooden horses on a rod":
+Is it possible to swap attributes in the input sentence to generate a new sentence that is different from the input sentence and makes logical sense? Yes
+Swappable adjectives: wooden, group
+Output: A wooden group of horses on a rod.
+
+For the caption "A cat sitting in front of a mirror looking at its reflection":
+Is it possible to swap attributes in the input sentence to generate a new sentence that is different from the input sentence and makes logical sense? Yes
+Swappable adjectives: sitting, front
+Output: A cat front of a mirror looking at its reflection.
+
+For the caption "A series of two photographs both depicting a person riding a horse":
+Is it possible to swap attributes in the input sentence to generate a new sentence that is different from the input sentence and makes logical sense? Yes
+Swappable adjectives: two, person
+Output: A series of person photographs both depicting a two riding a horse.
+
+For the caption "two men holding game controllers in front of a laptop screen":
+Is it possible to swap attributes in the input sentence to generate a new sentence that is different from the input sentence and makes logical sense? Yes
+Swappable adjectives: two, game
+Output: Two men holding controllers in front of a laptop screen.
+
+For the caption "People walking on the street in front of a Christmas tree and decorations on the clock tower":
+Is it possible to swap attributes in the input sentence to generate a new sentence that is different from the input sentence and makes logical sense? Yes
+Swappable adjectives: Christmas, clock
+Output: People walking on the street in front of a clock tree and decorations on the Christmas tower.
+Input: Two trains passing each other in a train station.
+Is it possible to swap attributes in the input sentence to generate a new sentence that is different from the input sentence and makes logical sense? Yes
+Swappable adjectives: two, passing
+Output: Passing trains two each other in a train station.
+
+Input: A woman on skis standing on a snow-covered hill.
+Is it possible to swap attributes in the input sentence to generate a new sentence that is different from the input sentence and makes logical sense? Yes
+Swappable adjectives: snow-covered, standing
+Output: A woman on skis snow-covered on a standing hill.
+
+Input: A small bedroom is decorated in a modern style.
+Is it possible to swap attributes in the input sentence to generate a new sentence that is different from the input sentence and makes logical sense? No
+
+Input: A man standing in a bathroom stall on the toilet peeking into the next stall.
+Is it possible to swap attributes in the input sentence to generate a new sentence that is different from the input sentence and makes logical sense? Yes
+Swappable adjectives: bathroom, next
+Output: A man standing in a next stall on the toilet peeking into the bathroom stall.
+
+Input: A man standing next to a boat on a river.
+Is it possible to swap attributes in the input sentence to generate a new sentence that is different from the input sentence and makes logical sense? Yes
+Swappable adjectives: next, river
+Output: A man standing on a boat next to a river.
