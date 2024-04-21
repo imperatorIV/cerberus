@@ -8,8 +8,9 @@ class ImageEncoder:
 
     def __init__(self, processor_link, model_link):
 
-        self.processor = ViTImageProcessor.from_pretrained(processor_link)
-        self.encoder = ViTModel.from_pretrained(model_link)
+        self.device = "cuda" if torch.cuda.is_available() else "cpu"
+        self.processor = ViTImageProcessor.from_pretrained(processor_link).to(self.device)
+        self.encoder = ViTModel.from_pretrained(model_link).to(self.device)
     
 
     def encode(self, file_path, data_path):
@@ -22,7 +23,7 @@ class ImageEncoder:
         for key, _ in data.items():
             img_file_name = data[key]["filename"]
             img_file_path = os.path.join(data_path, img_file_name)
-            img = Image.open(img_file_path)
+            img = Image.open(img_file_path).to(self.device)
             input = self.processor(images=img, return_tensors="pt")
             output = self.encoder(**input)
             pooler_output = output.pooler_output
